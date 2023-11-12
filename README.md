@@ -46,6 +46,7 @@
 
 | 機能名称 | APIのエンドポイント |
 | :--- | :--- |
+| ユーザー登録API | localhost:3000/signup |
 | ログインAPI | XXXXXXXX |
 | 残高確認API | XXXXXXXX |
 

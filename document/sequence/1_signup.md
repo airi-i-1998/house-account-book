@@ -1,16 +1,10 @@
 ```mermaid
 sequenceDiagram
-participant A as 認証サーバー
-participant B as ウェブサーバー
-participant C as アプリ
-Note over A, C: ユーザー登録
-C->>A: ユーザー登録リクエストAPI
-A-->>C: サインインレスポンス (Token: json)
-Note left of C: Tokenはアプリ内に保存
+participant A as ブラウザ
+participant B as Webサーバー
+Note over A, B: ユーザー登録
+A->>B: HTTP POST要求<br>(ユーザー登録リクエスト)
+B-->>A: HTTP POST応答
+Note left of B: Cookie受信
 
-Note over A, C: WebView アクセス
-C->>B: HTTPリクエスト (Token: HTTP Header)
-B->>A: ユーザー登録確認 (Token: json)
-A-->>B: 新規ユーザーページ
-B-->>C: HTTPレスポンス
 ````

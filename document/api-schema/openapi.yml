@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   description: API description
-  version: 0.0.1
-  title: XXXXXXXx
+  version: 0.1.9
+  title: Signup API
 tags:
   - name: auth
     description: 認証
@@ -35,9 +35,11 @@ components:
       required:
         - email
         - name
+        - password
       properties:
         email:
           type: string
         name:
           type: string
-    
+        password:
+          type: string
