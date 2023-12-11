@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+## 家計簿アプリ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 概要
 
-## Available Scripts
+- 概要の説明
+- デモ画面のスクリーンショット
 
-In the project directory, you can run:
+### 機能のPRDと技術仕様書の一覧
 
-### `npm start`
+| 機能名称 | PRDリンク | 技術仕様書のリンク |
+| :--- | :--- | :--- |
+| ユーザー登録機能 | [/document/prd/1_signup.md](/document/prd/1_signup.md) | [/document/techspec/1_signup.md](/document/techspec/1_signup.md) |
+| ログイン機能 | XXXXXXXX | XXXXXXXX |
+| ログアウト機能 | XXXXXXXX | XXXXXXXX |
+| 支出追加機能 | XXXXXXXX | XXXXXXXX |
+| 支出更新機能 | XXXXXXXX | XXXXXXXX |
+| 支出削除機能 | XXXXXXXX | XXXXXXXX |
+| 収入追加機能 | XXXXXXXX | XXXXXXXX |
+| 収入更新機能 | XXXXXXXX | XXXXXXXX |
+| 収入削除機能 | XXXXXXXX | XXXXXXXX |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [PRDのフォーマット例](/document/prd/1_login.md)
+- [技術仕様書のフォーマット例  ](/document/techspec/1_login.md)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+### 技術選定とその背景
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- バックエンド
+  - Go
+    - 記述方法がシンプルでわかりやすい
+    - 高速処理が可能
+    - 並行処理・並列処理が可能
 
-### `npm run build`
+- フロントエンド
+  - React
+    - 宣言的なViewによってコードの可読性が向上する
+    - コンポーネントベースのため様々なデータの取り出し、再利用がしやすい
+    - コンポーネント化することで機能の変更、追加がしやすいため
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### インフラ設計図
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- 後で作成
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### API一覧
+- [APIスキーマのリンク](/document/api-schema/openapi.yml)
 
-### `npm run eject`
+| 機能名称 | APIのエンドポイント |
+| :--- | :--- |
+| ユーザー登録API | [localhost:3000/signup](localhost:3000/signup) |
+| ログインAPI | XXXXXXXX |
+| 残高確認API | XXXXXXXX |
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- スキーマ作成時の参照先
+  - [Swagger公式doc](https://swagger.io/docs/specification/api-host-and-base-path/)
+  - [Swagger拡張機能](https://marketplace.visualstudio.com/items?itemName=Arjun.swagger-viewer)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### テーブル一覧
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- ER図の画像
+  - XXXXXX
+- [ER図のリンク](/document/db/db_er.dio)
+- ER図作成時の参照先
+  - [Draw.io VSCode拡張機能](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### ディレクトリ構成の説明
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- XXX
+- XXX
+  - XXX

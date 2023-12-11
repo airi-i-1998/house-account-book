@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  description: API description
+  version: 0.0.1
+  title: Signup API
+tags:
+  - name: auth
+    description: 認証
+
+paths:
+  /signup:
+    post:
+      summary: ユーザー登録用API
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupForm"
+      responses:
+        "200":
+          description: OK
+            Successfully authenticated.
+        "401":
+          description: unauthorized
+        "500":
+          description: Internal Server Error
+
+components:
+  schemas:
+    SignupForm:
+      type: object
+      required:
+        - email
+        - name
+        - password
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
