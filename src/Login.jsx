@@ -1,23 +1,33 @@
 function Login() {
   return (
-    <div className="Login">
-      <h1>Login</h1>
-      <div>
-        <label>
-          Email
-          <input type="text"></input>
-        </label>
+    <div class="wrapper">
+      <div class="container">
+        <h1>Welcome</h1>
+
+        <form class="form">
+          <input type="text" placeholder="Email"/>
+          <input type="password" placeholder="Password"/>
+          <button type="submit" id="login-button">Login</button>
+          <button type="submit" id="login-button">Sign up</button>
+        </form>
       </div>
-      <div>
-        <label>
-          Password
-          <input type="password"></input>
-        </label>
-      </div>
-      <button>Login</button>
-      <button>新規登録</button>
+
+      <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
     </div>
-  );
+
+
+      );
 }
 
-export default Login;
+      export default Login;
