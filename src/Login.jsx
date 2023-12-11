@@ -8,7 +8,6 @@ function Login() {
           <input type="text" placeholder="Email"/>
           <input type="password" placeholder="Password"/>
           <button type="submit" id="login-button">Login</button>
-          <button type="submit" id="login-button">Sign up</button>
         </form>
       </div>
 
