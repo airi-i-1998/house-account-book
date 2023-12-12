@@ -154,3 +154,8 @@ form button:hover {
   /* 現在のfade関数の代用 */
   bottom: -160px;
 }
+
+form p{
+  font-size: 20px;
+  padding-top: 10px;
+}
