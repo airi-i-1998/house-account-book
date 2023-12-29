@@ -25,7 +25,7 @@ type ResponseBody struct {
 
 func main() {
 	// ルーティング設定
-	http.HandleFunc("/signup", handleAPI)
+	http.HandleFunc("/signup", handleSignup)
 
 	// サーバーを起動し、ポート8080でリクエストを待ち受ける
 	port := ":8080"
@@ -36,7 +36,7 @@ func main() {
 	}
 }
 
-func handleAPI(w http.ResponseWriter, r *http.Request) {
+func handleSignup(w http.ResponseWriter, r *http.Request) {
 	// POSTメソッド以外のリクエストを受け付けないようにする
 	if r.Method != http.MethodPost {
 		http.Error(w, "POSTメソッドのみ受け付けています", http.StatusMethodNotAllowed)
@@ -96,6 +96,9 @@ if errMsg != "" {
 		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
 		return
 	}
+
+	// CORSを許可する
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	// レスポンスの作成
 	responseBody := ResponseBody{
