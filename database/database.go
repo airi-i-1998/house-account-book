@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ type User struct {
 	UpdatedAt string `db:"updated_at" json:"updated_at"`
 }
 
-func main() {
+func database() {
 	// dsn := os.Getenv("DSN")
 	//DBに接続する
 	db, err := sqlx.Open("mysql","root:ajs2b0ti@tcp(localhost:3306)/house_account_book")
