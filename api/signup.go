@@ -25,7 +25,7 @@ type ResponseBody struct {
 
 func main() {
 	// ルーティング設定
-	http.HandleFunc("/signup", handleAPI)
+	http.HandleFunc("/signup", handleSignup)
 
 	// サーバーを起動し、ポート8080でリクエストを待ち受ける
 	port := ":8080"
@@ -36,12 +36,24 @@ func main() {
 	}
 }
 
-func handleAPI(w http.ResponseWriter, r *http.Request) {
-	// POSTメソッド以外のリクエストを受け付けないようにする
-	if r.Method != http.MethodPost {
-		http.Error(w, "POSTメソッドのみ受け付けています", http.StatusMethodNotAllowed)
+func handleSignup(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == "OPTIONS" {
+		// CORSを許可する
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.WriteHeader(http.StatusOK)
 		return
 	}
+
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	// // POSTメソッド以外のリクエストを受け付けないようにする
+	// if r.Method != http.MethodPost {
+	// 	http.Error(w, "POSTメソッドのみ受け付けています", http.StatusMethodNotAllowed)
+	// 	return
+	// }
 
 	//DB接続
 	db, err := sql.Open("mysql", "root:ajs2b0ti@tcp(localhost:3306)/house_account_book")
@@ -60,26 +72,27 @@ func handleAPI(w http.ResponseWriter, r *http.Request) {
 
 	errMsg := ""
 
-// 空欄チェック
-if requestBody.Name == "" || requestBody.Email == "" || requestBody.Password == "" {
-    errMsg += "name、email、passwordは必須です。\n"
-}
+	// 空欄チェック
+	if requestBody.Name == "" || requestBody.Email == "" || requestBody.Password == "" {
+		errMsg += "name、email、passwordは必須です。\n"
+	}
 
-// emailフォーマットチェック
-if requestBody.Email != "" && !regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`).MatchString(requestBody.Email) {
-    errMsg += "有効なメールアドレスを入力してください。\n"
-}
+	// emailフォーマットチェック
+	if requestBody.Email != "" && !regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`).MatchString(requestBody.Email) {
+		errMsg += "有効なメールアドレスを入力してください。\n"
+	}
 
-// パスワードの文字数制限と正規表現を使用したパスワードのバリデーション
-if requestBody.Password != "" && (len(requestBody.Password) < 6 || len(requestBody.Password) > 20 || !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(requestBody.Password)) {
-    errMsg += "passwordは6文字以上20文字以下の英数字で入力してください。\n"
-}
+	// パスワードの文字数制限と正規表現を使用したパスワードのバリデーション
+	if requestBody.Password != "" && (len(requestBody.Password) < 6 || len(requestBody.Password) > 20 || !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(requestBody.Password)) {
+		errMsg += "passwordは6文字以上20文字以下の英数字で入力してください。\n"
+	}
 
-// エラーメッセージがある場合、HTTPレスポンスで返す
-if errMsg != "" {
-    http.Error(w, errMsg, http.StatusBadRequest)
-    return
-}
+	// エラーメッセージがある場合、HTTPレスポンスで返す
+	if errMsg != "" {
+		fmt.Println(errMsg)
+		http.Error(w, errMsg, http.StatusBadRequest)
+		return
+	}
 
 	// 受け取ったデータを使って何らかの処理を行う（ここでは簡単な例としてそのままレスポンスを作成）
 	responseMessage := fmt.Sprintf("Hello, %s! Your email is %s. Password is %s", requestBody.Name, requestBody.Email, requestBody.Password)
