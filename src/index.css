@@ -159,3 +159,9 @@ form p{
   font-size: 20px;
   padding-top: 10px;
 }
+
+.error-message {
+  color: crimson;
+  font-size: 15px;
+  padding-top: 10px;
+}
