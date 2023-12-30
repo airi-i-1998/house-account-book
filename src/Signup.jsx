@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Login from "./Login";
 
 function Signup() {
 
@@ -56,7 +55,11 @@ function Signup() {
     <div class="wrapper">
       <div class="container">
         <h1>Welcome</h1>
-        <p></p>
+        <div className="error-message">
+        {errorMessage.split('\n').map((error, index) => (
+            <div key={index}>{error}</div>
+          ))}
+          </div>
         <form className="form" onSubmit={handleSignup}>
           <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
           <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />

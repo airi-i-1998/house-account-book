@@ -23,6 +23,32 @@ type ResponseBody struct {
 	Message string `json:"message"`
 }
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+func sendErrorResponse(w http.ResponseWriter,message string,statusCode int) {
+	errorResponse := ErrorResponse{
+		Error: message,
+	}
+
+	// エラーメッセージをJSON形式にシリアライズ
+	responseJSON, err := json.Marshal(errorResponse)
+	if err != nil {
+		http.Error(w, "JSONのシリアライズに失敗しました", http.StatusInternalServerError)
+		return
+	}
+
+	// Content-Typeを設定してHTTPレスポンスのボディにJSON形式のエラーメッセージを設定
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	_, err = w.Write(responseJSON)
+	if err != nil {
+		http.Error(w, "レスポンスの書き込みに失敗しました", http.StatusInternalServerError)
+		return
+	}
+}
+
 func main() {
 	// ルーティング設定
 	http.HandleFunc("/signup", handleSignup)
@@ -48,12 +74,6 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	// // POSTメソッド以外のリクエストを受け付けないようにする
-	// if r.Method != http.MethodPost {
-	// 	http.Error(w, "POSTメソッドのみ受け付けています", http.StatusMethodNotAllowed)
-	// 	return
-	// }
 
 	//DB接続
 	db, err := sql.Open("mysql", "root:ajs2b0ti@tcp(localhost:3306)/house_account_book")
@@ -90,7 +110,7 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 	// エラーメッセージがある場合、HTTPレスポンスで返す
 	if errMsg != "" {
 		fmt.Println(errMsg)
-		http.Error(w, errMsg, http.StatusBadRequest)
+		sendErrorResponse(w, errMsg, http.StatusBadRequest)
 		return
 	}
 
@@ -124,3 +144,4 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
