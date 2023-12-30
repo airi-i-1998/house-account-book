@@ -10,7 +10,7 @@
 | 機能名称 | PRDリンク | 技術仕様書のリンク |
 | :--- | :--- | :--- |
 | ユーザー登録機能 | [/document/prd/1_signup.md](/document/prd/1_signup.md) | [/document/techspec/1_signup.md](/document/techspec/1_signup.md) |
-| ログイン機能 | XXXXXXXX | XXXXXXXX |
+| ログイン機能 | [/document/prd/2_login.md](/document/prd/2_login.md) | [/document/techspec/2_login.md](/document/techspec/2_login.md) |
 | ログアウト機能 | XXXXXXXX | XXXXXXXX |
 | 支出追加機能 | XXXXXXXX | XXXXXXXX |
 | 支出更新機能 | XXXXXXXX | XXXXXXXX |
@@ -47,7 +47,7 @@
 | 機能名称 | APIのエンドポイント |
 | :--- | :--- |
 | ユーザー登録API | [localhost:8080/signup](localhost:8080/signup) |
-| ログインAPI | XXXXXXXX |
+| ログインAPI | [localhost:8080/login](localhost:8080/login) |
 | 残高確認API | XXXXXXXX |
 
 - スキーマ作成時の参照先
