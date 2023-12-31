@@ -49,19 +49,6 @@ func sendErrorResponse(w http.ResponseWriter,message string,statusCode int) {
 	}
 }
 
-func main() {
-	// ルーティング設定
-	http.HandleFunc("/signup", handleSignup)
-
-	// サーバーを起動し、ポート8080でリクエストを待ち受ける
-	port := ":8080"
-	fmt.Printf("サーバーをポート%sで起動中...\n", port)
-	err := http.ListenAndServe(port, nil)
-	if err != nil {
-		log.Fatalf("サーバーの起動に失敗しました: %s", err)
-	}
-}
-
 func handleSignup(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "OPTIONS" {
