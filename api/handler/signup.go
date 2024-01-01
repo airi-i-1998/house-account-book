@@ -1,13 +1,12 @@
-package main
+package handler
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"regexp"
 
+	"example.com/m/api/conf"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -27,7 +26,7 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-func sendErrorResponse(w http.ResponseWriter,message string,statusCode int) {
+func sendErrorResponse(w http.ResponseWriter, message string, statusCode int) {
 	errorResponse := ErrorResponse{
 		Error: message,
 	}
@@ -49,7 +48,7 @@ func sendErrorResponse(w http.ResponseWriter,message string,statusCode int) {
 	}
 }
 
-func handleSignup(w http.ResponseWriter, r *http.Request) {
+func Singup(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "OPTIONS" {
 		// CORSを許可する
@@ -62,16 +61,9 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	//DB接続
-	db, err := sql.Open("mysql", "root:ajs2b0ti@tcp(localhost:3306)/house_account_book")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
 	// リクエストボディの読み取り
 	var requestBody RequestBody
-	err = json.NewDecoder(r.Body).Decode(&requestBody)
+	err := json.NewDecoder(r.Body).Decode(&requestBody)
 	if err != nil {
 		http.Error(w, "リクエストの解析に失敗しました", http.StatusBadRequest)
 		return
@@ -104,7 +96,7 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 	// 受け取ったデータを使って何らかの処理を行う（ここでは簡単な例としてそのままレスポンスを作成）
 	responseMessage := fmt.Sprintf("Hello, %s! Your email is %s. Password is %s", requestBody.Name, requestBody.Email, requestBody.Password)
 
-	stmt, err := db.Prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)")
+	stmt, err := conf.DB.Prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)")
 	if err != nil {
 		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
 		return
@@ -131,4 +123,3 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
