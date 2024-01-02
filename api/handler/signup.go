@@ -8,6 +8,7 @@ import (
 
 	"example.com/m/api/conf"
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // RequestBody はPOSTリクエストのJSONデータを格納する構造体。
@@ -46,6 +47,15 @@ func sendErrorResponse(w http.ResponseWriter, message string, statusCode int) {
 		http.Error(w, "レスポンスの書き込みに失敗しました", http.StatusInternalServerError)
 		return
 	}
+}
+
+// パスワードハッシュを作る関数
+func passwordHash(pw string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), err
 }
 
 func Singup(w http.ResponseWriter, r *http.Request) {
@@ -96,6 +106,7 @@ func Singup(w http.ResponseWriter, r *http.Request) {
 	// 受け取ったデータを使って何らかの処理を行う（ここでは簡単な例としてそのままレスポンスを作成）
 	responseMessage := fmt.Sprintf("Hello, %s! Your email is %s. Password is %s", requestBody.Name, requestBody.Email, requestBody.Password)
 
+
 	stmt, err := conf.DB.Prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)")
 	if err != nil {
 		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
@@ -103,7 +114,12 @@ func Singup(w http.ResponseWriter, r *http.Request) {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(requestBody.Name, requestBody.Email, requestBody.Password)
+	hashedPassword, err := passwordHash(requestBody.Password)
+	if err != nil {
+		http.Error(w, "パスワードのハッシュ化に失敗しました", http.StatusInternalServerError)
+		return
+	}
+	_, err = stmt.Exec(requestBody.Name, requestBody.Email, hashedPassword)
 	if err != nil {
 		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
 		return
