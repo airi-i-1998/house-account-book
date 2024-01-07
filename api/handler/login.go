@@ -1,14 +1,16 @@
 package handler
 
 import (
+	"log"
 	"encoding/json"
-	"database/sql"
 	"net/http"
 	"sync"
+	"database/sql"
 
 	"example.com/m/api/conf"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // RequestLogin はPOSTリクエストのJSONデータを格納する構造体。
@@ -25,64 +27,67 @@ var (
 )
 
 // データベースからユーザー情報を取得する
-func getUser(email, password string) (string, error) {
+func getUser(email string) (string, error) {
 	var storedPassword string
 	err := conf.DB.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&storedPassword)
-	//エラー発生確認
 	if err != nil {
-			//エラー発生の場合
-			if err == sql.ErrNoRows {
-					return "", nil // ユーザーが見つからない場合
-			}
-			//エラーがない場合
-			return "", err // その他のエラーが発生した場合
+		if err == sql.ErrNoRows {
+			return "", nil // ユーザーが見つからない場合
+		}
+		return "", err // その他のエラーが発生した場合
 	}
-	return storedPassword, nil // パスワードを返す
+	return storedPassword, nil // ハッシュ化されたパスワードを返す
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var requestLogin RequestLogin
 	err := json.NewDecoder(r.Body).Decode(&requestLogin)
 	if err != nil {
-			http.Error(w, "リクエストの解析に失敗しました", http.StatusBadRequest)
-			return
+		http.Error(w, "リクエストの解析に失敗しました", http.StatusBadRequest)
+		return
 	}
 
 	email := requestLogin.Email
 	password := requestLogin.Password
 
 	// データベース内のユーザー情報を取得
-	storedPassword, err := getUser(email, password)
+	storedPassword, err := getUser(email)
 	if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
+		log.Printf("Login failed for email: %s, error: %s",storedPassword, err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
+	log.Printf("Retrieved stored password for email: %s", storedPassword)
 
-	// パスワードが一致するかを確認
-	if password != storedPassword {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
+	// データベースから取得したハッシュ化されたパスワードと、入力された生のパスワードを比較
+	err = bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(password))
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		log.Printf("Login failed for email: %s, error: %s",password, err.Error())
+		return
 	}
 
 	sessionID := uuid.New().String()
 
-	//サーバサイドでsessionを保存
+	// サーバサイドでsessionを保存
 	sessionMutex.Lock()
 	sessions[sessionID] = true
 	sessionMutex.Unlock()
 
 	// クライアントにセッションを送信
 	http.SetCookie(w, &http.Cookie{
-			Name:   "session_id",
-			Value:  sessionID,
-			Path:   "/",
-			MaxAge: 7200, // 有効期限を2時間に設定
+		Name:   "session_id",
+		Value:  sessionID,
+		Path:   "/",
+		MaxAge: 7200, // 有効期限を2時間に設定
 	})
+
 
 	w.Write([]byte("Login successful!"))
 }
+
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
-	// CookieからセッションIDを取得
+	// セッションIDをCookieから取得
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -102,7 +107,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	// CookieからセッションIDを取得し、サーバーサイドでセッションを削除
+	// セッションIDをCookieから取得し、サーバーサイドでセッションを削除
 	cookie, err := r.Cookie("session_id")
 	if err == nil {
 		sessionMutex.Lock()

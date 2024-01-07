@@ -58,7 +58,7 @@ func passwordHash(pw string) (string, error) {
 	return string(hash), err
 }
 
-func Singup(w http.ResponseWriter, r *http.Request) {
+func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "OPTIONS" {
 		// CORSを許可する
