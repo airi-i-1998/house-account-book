@@ -165,3 +165,12 @@ form p{
   font-size: 15px;
   padding-top: 10px;
 }
+
+.calendar{
+  color: black;
+}
+
+.fc-toolbar-title{
+  padding-left: 40px;
+  padding-top: 10px;
+}
