@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"fmt"
@@ -16,8 +16,8 @@ func main() {
 	// ルーティング設定
 	http.HandleFunc("/signup", handler.Signup)
 	http.HandleFunc("/login", handler.Login)
-	// http.HandleFunc("/dashboard", handler.Dashboard)
-	// http.HandleFunc("/logout", handler.Logout)
+	// http.HandleFunc("/dashboard", dashboardHandler)
+	// http.HandleFunc("/logout", logoutHandler)
 
 	// サーバーを起動し、ポート8080でリクエストを待ち受ける
 	port := ":8080"
