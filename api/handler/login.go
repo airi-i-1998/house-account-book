@@ -40,6 +40,17 @@ func getUser(email string) (string, error) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		// CORSを許可する
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	var requestLogin RequestLogin
 	err := json.NewDecoder(r.Body).Decode(&requestLogin)
 	if err != nil {

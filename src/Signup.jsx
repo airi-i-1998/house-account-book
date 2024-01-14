@@ -35,7 +35,7 @@ function Signup() {
 
       // レスポンスの処理
       if (response.ok) {
-        navigate('/Login');
+        navigate('/Home');
       } else {
         //APIからのレスポンスをjson形式に解析
         const data = await response.json();
