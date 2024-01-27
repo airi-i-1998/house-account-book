@@ -155,7 +155,7 @@ form button:hover {
   bottom: -160px;
 }
 
-form p{
+form p {
   font-size: 20px;
   padding-top: 10px;
 }
@@ -166,11 +166,65 @@ form p{
   padding-top: 10px;
 }
 
-.calendar{
+.calendar-wrap {
   color: black;
+  display: flex;
+  width: 100%;
+  hover: opacity -80px;
 }
 
-.fc-toolbar-title{
+.calendar {
+  width: 75%;
+}
+
+.fc-toolbar-title {
   padding-left: 40px;
   padding-top: 10px;
+}
+
+h1 {
+  width: 50%;
+  display: block;
+}
+
+.icon {
+  width: 180%;
+  margin-top: 30px;
+}
+
+.home-icon {
+  width: 20%;
+  margin-right: 10px;
+}
+
+.side-menu {
+  width: 15%;
+  margin:0 20px;
+}
+
+.list {
+  margin-top: 30px;
+  font-size: 20px;
+  display: flex;
+  padding-left: 10px;
+  vertical-align: middle;
+}
+
+.logout {
+  /* color: white; */
+  width: 70%;
+  margin-top: 30px;
+  padding: 5px 0;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.logout:hover{
+  background-color: ghostwhite;
+}
+
+.logout-wapper{
+  display:flex;
+  justify-content: center;
+  cursor: pointer;
 }
