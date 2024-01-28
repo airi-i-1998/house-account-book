@@ -16,6 +16,7 @@ func main() {
 	// ルーティング設定
 	http.HandleFunc("/signup", handler.Signup)
 	http.HandleFunc("/login", handler.Login)
+	http.HandleFunc("/balance", handler.Balance)
 	// http.HandleFunc("/dashboard", handler.Dashboard)
 	// http.HandleFunc("/logout", handler.Logout)
 
