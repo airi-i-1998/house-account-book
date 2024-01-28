@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import './style.css';
 
 function Signup() {
 
@@ -64,8 +65,8 @@ function Signup() {
           <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
           <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
           <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button type="submit" id="login-button">Sign up</button>
-          <p>Already have an account?　<Link to="/Login">Login</Link></p>
+          <button type="submit" id="login-button" className="bg-white-500 hover:bg-sky-700">Sign up</button>
+          <p className="text-white-400">Already have an account?　<Link to="/Login">Login</Link></p>
         </form>
       </div>
 

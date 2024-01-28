@@ -4,11 +4,18 @@ import home from "../image/home.png";
 import money from "../image/money.png";
 import calendar from "../image/calendar.png";
 import memo from "../image/memo.png";
+import { useNavigate } from 'react-router-dom';
 
-function SideMenu() {
+const SideMenu = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate('/');
+  };
+
   return (
     <div className="side-menu">
-      <h1>
+      <h1 className="icon-wrapper">
         <img src={icon} className="icon" />
       </h1>
       <ul>
@@ -30,7 +37,7 @@ function SideMenu() {
         </span>
       </ul>
       <div className="logout-wapper">
-        <button className="logout">ログアウト</button>
+        <button className="logout" onClick={handleLogout}>ログアウト</button>
       </div>
     </div>
   );
