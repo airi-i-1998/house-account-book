@@ -11,7 +11,7 @@ import (
 
 type RequestBalance struct {
 	Description string    `json:"description"`
-	Date        time.Time `json:"date"`
+	Date        string `json:"date"`
 	Amount      float64   `json:"amount"`
 	Category    string    `json:"category"`
 	Memo        string    `json:"memo"`
@@ -36,20 +36,22 @@ func Balance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "リクエストの解析に失敗しました", http.StatusBadRequest)
 		return
 	}
-	log.Println(requestBalance)
+	log.Printf("POSTされたデータ: %+v\n", requestBalance)
 
 	dateStr := r.FormValue("date")
-	date, err := time.Parse("2006-01-02", dateStr)
-	if err != nil {
-		log.Println("日付のパースエラー:", err)
-		http.Error(w, "日付のパースに失敗しました", http.StatusBadRequest)
-		return
+	if dateStr != "" {
+		date, err := time.Parse("2006-01-02", dateStr)
+		if err != nil {
+			log.Println("日付のパースエラー:", err)
+			http.Error(w, "日付のパースに失敗しました", http.StatusBadRequest)
+			return
+		}
+		log.Println("パースした日付:", date)
+		// UTCに変換せず、そのまま文字列としてセット
+		requestBalance.Date = dateStr
 	}
+	log.Println("設定した日付:", requestBalance.Date)
 
-	// パースした日付をUTCに設定
-	requestBalance.Date = date.UTC()
-
-	// データベースに挿入
 	stmt, err := conf.DB.Prepare("INSERT INTO transactions (description, date, amount, category, memo) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
@@ -65,4 +67,6 @@ func Balance(w http.ResponseWriter, r *http.Request) {
 
 	// 成功レスポンス
 	w.WriteHeader(http.StatusCreated)
+	// レスポンスとして保存したデータを返す (任意)
+	json.NewEncoder(w).Encode(requestBalance)
 }

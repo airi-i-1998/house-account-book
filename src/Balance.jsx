@@ -22,6 +22,8 @@ function Balance() {
       <button onClick={() => handleDash(index)} className="w-1/12 mr-4">削除</button>
     </div>
   ));
+  console.log(inputList);
+
 
   // 3. 高さの指定とスクロール
   const inputListContainerStyle = {
@@ -33,10 +35,10 @@ function Balance() {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === 'amount' ? Number(value) : value,
     }));
+
     try {
-      // APIエンドポイントにデータを送信するためのコードを記述
       const response = await fetch("http://localhost:8080/balance", {
         method: "POST",
         headers: {
@@ -44,18 +46,16 @@ function Balance() {
         },
         body: JSON.stringify(formData),
       });
-      // レスポンスの処理
       if (response.ok) {
         const data = await response.json();
         // データを処理するなど
+        console.log("Data from server:", data);
       } else {
-        // エラーレスポンスの処理
         console.error("Error:", response.statusText);
       }
     } catch (error) {
-      // fetch自体のエラー
       console.error("Error:", error);
-    };
+    }
   };
 
   const handleRegistration = () => {
