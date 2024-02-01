@@ -1,31 +1,33 @@
 package handler
 
 import (
-	"net/http"
-	"example.com/m/api/conf"
-	"time"
 	"encoding/json"
 	"log"
+	"net/http"
+	"strings"
+	"time"
+
+	"example.com/m/api/conf"
 )
 
-type RequestBalance struct{
-	Description string `json:"description"`
-	Date time.Time `json:"date"`
-	Amount float64 `json:"amount"`
-	Category string `json:"category"`
-	Memo string `json:"memo"`
+type RequestBalance struct {
+	Description string  `json:"description"`
+	Date        string  `json:"date"`
+	Amount      float64 `json:"amount"`
+	Category    string  `json:"category"`
+	Memo        string  `json:"memo"`
 }
 
 func Balance(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodOptions {
-			// CORSを許可する
-			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000/Balance")
-			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-			w.WriteHeader(http.StatusOK)
-			return
+	if r.Method == "OPTIONS" {
+		// CORSを許可する
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.WriteHeader(http.StatusOK)
+		return
 	}
 
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000/Balance")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	// リクエストボディをパース
@@ -35,22 +37,44 @@ func Balance(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "リクエストの解析に失敗しました", http.StatusBadRequest)
 		return
 	}
-	log.Println(requestBalance);
+	log.Printf("POSTされたデータ: %+v\n", requestBalance)
 
-	// データベースに挿入
+	// requestBalance.Memo = strings.TrimSpace(requestBalance.Memo)
+	if requestBalance.Memo != "" {
+		requestBalance.Memo = strings.TrimSpace(requestBalance.Memo)
+	} else {
+		requestBalance.Memo = "" // もし Memo が空だった場合は空の文字列として明示的にセット
+	}
+
+	dateStr := r.FormValue("date")
+	if dateStr != "" {
+		date, err := time.Parse("2006-01-02", dateStr)
+		if err != nil {
+			log.Println("日付のパースエラー:", err)
+			http.Error(w, "日付のパースに失敗しました", http.StatusBadRequest)
+			return
+		}
+		log.Println("パースした日付:", date)
+		// UTCに変換せず、そのまま文字列としてセット
+		requestBalance.Date = dateStr
+	}
+	log.Println("設定した日付:", requestBalance.Date)
+
 	stmt, err := conf.DB.Prepare("INSERT INTO transactions (description, date, amount, category, memo) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
-			http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
-			return
+		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
+		return
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(requestBalance.Description, requestBalance.Date, requestBalance.Amount, requestBalance.Category, requestBalance.Memo)
 	if err != nil {
-			http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
-			return
+		http.Error(w, "データベースへの保存に失敗しました", http.StatusInternalServerError)
+		return
 	}
 
 	// 成功レスポンス
 	w.WriteHeader(http.StatusCreated)
+	// レスポンスとして保存したデータを返す (任意)
+	json.NewEncoder(w).Encode(requestBalance)
 }

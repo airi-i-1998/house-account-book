@@ -4,25 +4,26 @@ import SideMenu from './components/SideMenu';
 function Balance() {
   const [inputData, setInputData] = useState([]);
   const [formData, setFormData] = useState({
-    type: '',
-    date: '',
+    description: '',
+    date: '2024-02-01',
     amount: '',
     category: '食費',
     memo: '',
-
   });
 
   // 2. データの表示
   const inputList = inputData.map((data, index) => (
     <div key={index} className="mt-4 text-2xl w-full flex">
       <span className="w-2/12">{data.date}</span>
-      <span className="w-2/12">{data.type}</span>
+      <span className="w-2/12">{data.description}</span>
       <span className="w-2/12">{data.amount}</span>
       <span className="w-2/12">{data.category}</span>
       <span className="w-3/12">{data.memo}</span>
       <button onClick={() => handleDash(index)} className="w-1/12 mr-4">削除</button>
     </div>
   ));
+  console.log(inputList);
+
 
   // 3. 高さの指定とスクロール
   const inputListContainerStyle = {
@@ -30,27 +31,53 @@ function Balance() {
     overflowY: 'auto',
   };
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === 'amount' ? Number(value) : value,
     }));
   };
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     // 登録ボタンがクリックされたときの処理
     // データをinputDataに追加するなどの処理を実装
     setInputData((prevData) => [
       ...prevData,
       {
         date: formData.date,
-        type: formData.type,
+        description: formData.description,
         amount: formData.amount,
         category: formData.category,
         memo: formData.memo,
       },
     ]);
+
+    try {
+      const response = await fetch("http://localhost:8080/balance", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description: formData.description,
+          date: formData.date,
+          amount: formData.amount,
+          category: formData.category,
+          memo: formData.memo,
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        // データを処理するなど
+        console.log("Data from server:", data);
+      } else {
+        console.error("Error:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
   };
 
   const handleDash = (index) => {
@@ -70,9 +97,9 @@ function Balance() {
           <input
             type="radio"
             id="income"
-            name="type"
+            name="description"
             value="収入"  // 収入の場合の値
-            checked={formData.type === '収入'}
+            checked={formData.description === '収入'}
             onChange={handleChange}
             className='mr-3 items-center'
           />
@@ -80,9 +107,9 @@ function Balance() {
           <input
             type="radio"
             id="expense"
-            name="type"
+            name="description"
             value="支出"  // 支出の場合の値
-            checked={formData.type === '支出'}
+            checked={formData.description === '支出'}
             onChange={handleChange}
             className="mr-3 items-center"
           />
