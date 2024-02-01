@@ -4,17 +4,18 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"example.com/m/api/conf"
 )
 
 type RequestBalance struct {
-	Description string    `json:"description"`
-	Date        string `json:"date"`
-	Amount      float64   `json:"amount"`
-	Category    string    `json:"category"`
-	Memo        string    `json:"memo"`
+	Description string  `json:"description"`
+	Date        string  `json:"date"`
+	Amount      float64 `json:"amount"`
+	Category    string  `json:"category"`
+	Memo        string  `json:"memo"`
 }
 
 func Balance(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +38,13 @@ func Balance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("POSTされたデータ: %+v\n", requestBalance)
+
+	// requestBalance.Memo = strings.TrimSpace(requestBalance.Memo)
+	if requestBalance.Memo != "" {
+		requestBalance.Memo = strings.TrimSpace(requestBalance.Memo)
+	} else {
+		requestBalance.Memo = "" // もし Memo が空だった場合は空の文字列として明示的にセット
+	}
 
 	dateStr := r.FormValue("date")
 	if dateStr != "" {

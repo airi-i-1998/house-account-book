@@ -37,28 +37,9 @@ function Balance() {
       ...prevData,
       [name]: name === 'amount' ? Number(value) : value,
     }));
-
-    try {
-      const response = await fetch("http://localhost:8080/balance", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        // データを処理するなど
-        console.log("Data from server:", data);
-      } else {
-        console.error("Error:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     // 登録ボタンがクリックされたときの処理
     // データをinputDataに追加するなどの処理を実装
     setInputData((prevData) => [
@@ -71,6 +52,32 @@ function Balance() {
         memo: formData.memo,
       },
     ]);
+
+    try {
+      const response = await fetch("http://localhost:8080/balance", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description: formData.description,
+          date: formData.date,
+          amount: formData.amount,
+          category: formData.category,
+          memo: formData.memo,
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        // データを処理するなど
+        console.log("Data from server:", data);
+      } else {
+        console.error("Error:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
   };
 
   const handleDash = (index) => {
