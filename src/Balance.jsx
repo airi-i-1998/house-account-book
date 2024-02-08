@@ -22,8 +22,6 @@ function Balance() {
       <button onClick={() => handleDash(index)} className="w-1/12 mr-4">削除</button>
     </div>
   ));
-  console.log(inputList);
-
 
   // 3. 高さの指定とスクロール
   const inputListContainerStyle = {
@@ -138,7 +136,8 @@ function Balance() {
           </span>
           <span className="mt-6 flex items-center">
             カテゴリ
-            <select name="category"
+            <select
+              name="category"
               value={formData.category}
               onChange={handleChange}
               className="ml-3 text-lg"

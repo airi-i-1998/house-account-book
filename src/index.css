@@ -200,7 +200,7 @@ form p {
 
 .side-menu {
   width: 15%;
-  margin:0 20px;
+  margin-left: 5%;
 }
 
 .list {
@@ -209,6 +209,7 @@ form p {
   display: flex;
   padding-left: 10px;
   vertical-align: middle;
+  align-items: center;
 }
 
 .logout {
@@ -228,4 +229,5 @@ form p {
   display:flex;
   justify-content: center;
   cursor: pointer;
+  margin-top: 40px;
 }
