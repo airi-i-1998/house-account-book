@@ -4,7 +4,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import SideMenu from './components/SideMenu';
-function Home() {
+function Calendar() {
 
   return (
     <div className="calendar-wrap">
@@ -30,4 +30,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Calendar;

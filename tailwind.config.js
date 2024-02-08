@@ -3,7 +3,7 @@ module.exports = {
   content:[
     "./src/Signup.jsx",
     "./src/Login.jsx",
-    "./src/Home.jsx",
+    "./src/Calendar.jsx",
     "./src/Balance.jsx",
 ],
   theme: {

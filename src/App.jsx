@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
-import Home from "./Home";
+import Calendar from "./Calendar";
 import Balance from "./Balance";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/Home" element={<Home />} />
+        <Route path="/Calendar" element={<Calendar />} />
         <Route path="/Balance" element={<Balance />} />
       </Routes>
     </BrowserRouter>
