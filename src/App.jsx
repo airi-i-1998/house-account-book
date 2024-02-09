@@ -4,6 +4,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Calendar from "./Calendar";
 import Balance from "./Balance";
+import TodoList from "./TodoList";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="TodoList" element={<TodoList />} />
         <Route path="/Calendar" element={<Calendar />} />
         <Route path="/Balance" element={<Balance />} />
       </Routes>
