@@ -34,7 +34,7 @@ const SideMenu = () => {
         </span>
         <span className="list">
           <img src={memo} className="home-icon" />
-          <Link to="/Home">メモリスト</Link>
+          <Link to="/TodoList">メモリスト</Link>
         </span>
       </ul>
       <div className="logout-wapper">

@@ -14,11 +14,11 @@
 }
 
 /* フォントとテキストスタイル */
-body {
+/* body {
   font-family: 'Source Sans Pro', sans-serif;
-  height: 1000px;
+  height: 1000px; */
   /* color: white; */
-}
+/* } */
 
 /* placeholderのスタイル */
 body::-webkit-input-placeholder {
