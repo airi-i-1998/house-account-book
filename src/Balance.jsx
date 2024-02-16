@@ -97,7 +97,7 @@ function Balance() {
             id="income"
             name="description"
             value="収入"  // 収入の場合の値
-            checked={formData.description === '収入'}
+
             onChange={handleChange}
             className='mr-3 items-center'
           />
@@ -164,7 +164,7 @@ function Balance() {
             />
           </span>
         </div>
-        <button onClick={handleRegistration} className="mt-6 text-lg p-1 bg-emerald-300 hover:bg-emerald-700 rounded-full">登録する</button>
+        <button onClick={handleRegistration} className="mt-6 text-lg p-1 bg-emerald-300 hover:bg-emerald-500 rounded-lg">登録する</button>
         <div className="w-full" style={inputListContainerStyle}>
           <h1 className="mt-10 text-5xl underline underline-offset-4">入力一覧</h1>
           {inputList}
