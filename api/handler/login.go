@@ -4,7 +4,6 @@ import (
 	"log"
 	"encoding/json"
 	"net/http"
-	"sync"
 	"database/sql"
 
 	"example.com/m/api/conf"
@@ -18,13 +17,6 @@ type RequestLogin struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
-
-var (
-	// セッション情報を保存するためのマップ
-	sessions = make(map[string]bool)
-	// セッション情報へのアクセスを同期するためのミューテックス
-	sessionMutex = &sync.Mutex{}
-)
 
 // データベースからユーザー情報を取得する
 func getUser(email string) (string, error) {
@@ -115,23 +107,4 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write([]byte("Welcome to your dashboard!"))
-}
-
-func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	// セッションIDをCookieから取得し、サーバーサイドでセッションを削除
-	cookie, err := r.Cookie("session_id")
-	if err == nil {
-		sessionMutex.Lock()
-		delete(sessions, cookie.Value)
-		sessionMutex.Unlock()
-	}
-
-	http.SetCookie(w, &http.Cookie{
-		Name:   "session_id",
-		Value:  "",
-		Path:   "/",
-		MaxAge: -1, // Cookieを削除
-	})
-
-	w.Write([]byte("Logout successful!"))
 }
